@@ -2,15 +2,15 @@
 
 **Github:**
 
- - [ ] Run PowerShell Script: `./init "{APP_NAME}" "{APP_SHORT_NAME}"`.
+ - [*] Run PowerShell Script: `./init "{APP_NAME}" "{APP_SHORT_NAME}"`.
 
  This will replace placeholder text within `package.json`, `manifest.json`, `index.html`, and `AppSettings.js`; then install all NPM dependencies.
 
 **Icons:**
 
- - [ ] Replace `favicon.ico`
- - [ ] Replace `logo192.png`
- - [ ] Replace `logo512.png`
+ - [*] Replace `favicon.ico`
+ - [*] Replace `android-chrome-512x512.png`
+ - [*] Replace `android-chrome-192x192.png`
 
 ## Optional Customisation
 
