@@ -7,7 +7,7 @@ const AppSettings =
         GH_ROOT: '/w05-todo-list-challenge'
     },
     routes: [
-        { path: "/", page: "LandingPage" }
+        
     ]
 };
 export default AppSettings;

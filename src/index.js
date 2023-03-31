@@ -10,6 +10,7 @@ import AppSettings from './AppSettings';
 
 // Page Imports
 import { NotFound } from './navigation/_ErrorPages';
+import App from './App';
 
 // Routing
 import {
@@ -18,9 +19,11 @@ import {
     Route,
     RouterProvider
 } from "react-router-dom";
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
+            <Route index element={<App />} />
             {AppSettings.routes.map((r, index) =>
             {
                 const Page = require(`@pages/${r.page}`).default;
