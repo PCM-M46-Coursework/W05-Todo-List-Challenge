@@ -1,0 +1,11 @@
+/* =================================================== */
+/*  SIDEBAR STYLES
+/* =================================================== */
+
+.sidebar-left {
+    background-color: var(--bg-primary);
+    min-height: calc(100vh - 50px);
+    width: 290px;
+    box-shadow: 0 0 1ch var(--bg-shadow);
+    color: var(--font-color-secondary);
+}
