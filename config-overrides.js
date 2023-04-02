@@ -4,8 +4,7 @@ module.exports = function override(config)
     alias({
         '~': './src',
         '@components': './src/components',
-        '@styles': './src/styles',
-        '@pages': './src/pages',
+        '@styles': './src/styles'
     })(config);
 
     config.module.rules.push({
