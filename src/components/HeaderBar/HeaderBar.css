@@ -1,0 +1,26 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding:10px;
+    background-color: var(--bg-brand);
+    min-width: 100vw;
+    min-height: 50px;
+    box-shadow: 0 0 2ch var(--bg-shadow);
+    z-index: 1;
+    color: #fff;
+}
+
+.app-title {
+    font-size: 1.3rem;
+    font-weight: 500!important;
+    padding-left: 10px;
+}
+
+.app-icon {
+    padding: 7px 10px 0px 20px;
+}

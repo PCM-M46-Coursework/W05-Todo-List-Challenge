@@ -24,11 +24,6 @@ const router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route index element={<App />} />
-            {AppSettings.routes.map((r, index) =>
-            {
-                const Page = require(`@pages/${r.page}`).default;
-                return (<Route key={index} strict path={r.path} element={<Page />} />);
-            })}
             <Route path="*" element={<NotFound />} />
         </Route>
     ), { basename: AppSettings[process.env.NODE_ENV || 'development'].GH_ROOT }
