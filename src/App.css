@@ -5,3 +5,33 @@
     background-color: var(--bg-secondary);
     font-family: var(--font-primary);
 }
+
+.main-panel {
+    margin: 20px 40px;
+    flex: 1;
+}
+
+.main-panel .title {
+    font-size: 42px;
+    font-weight: 100;
+    color: var(--bg-brand);
+}
+
+.main-panel .description {
+    font-size: 21px;
+    font-weight: 100;
+    color: var(--bg-brand);
+}
+
+.add-task-panel {
+    width: 100%;
+    padding: 20px;
+}
+
+.add-task-panel svg {
+    color: var(--bg-brand);
+}
+
+.add-task-panel .add-task-input {
+    color: var(--bg-brand);
+}
