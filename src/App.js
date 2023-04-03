@@ -1,11 +1,17 @@
-import HeaderBar from './components/HeaderBar';
-import SideBar from './components/SideBar';
-
-import './App.css';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { isEmpty } from 'lodash';
 
+import HeaderBar from './components/bars/HeaderBar';
+import SideBar from './components/bars/SideBar';
+
+import './App.css';
+
+/**
+ * The main application page for the task list app.
+ * 
+ * @returns {JSX.Element} - The rendered component.
+ */
 export default function App()
 {
     // =========================================================

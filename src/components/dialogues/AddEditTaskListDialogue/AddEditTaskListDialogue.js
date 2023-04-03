@@ -10,7 +10,17 @@ import
         Button,
     } from '@mui/material';
 
-
+/**
+ * A dialogue component for adding/editing a task list.
+ * 
+ * @param {object} props - The component props.
+ * @param {object} [props.initialList={}] - The initial task list object.
+ * @param {function} props.onClose - The callback function to close the dialogue.
+ * @param {function} props.onConfirm - The callback function to confirm the changes.
+ * @param {string} props.type - The type of the dialogue (either "Add" or "Edit").
+ * @param {boolean} [props.open=false] - Whether the dialogue is open or not.
+ * @returns {JSX.Element} - The rendered component.
+ */
 export default function AddEditTaskListDialogue({ initialList = {}, onClose, onConfirm, type, open = false })
 {
     console.log(initialList);
@@ -18,6 +28,9 @@ export default function AddEditTaskListDialogue({ initialList = {}, onClose, onC
     const [title, setTitle] = useState(() => initialList.title || '');
     const [description, setDescription] = useState(() => initialList.description || '');
 
+    /**
+     * Called when the user presses to OK button.
+     */
     function handleConfirm()
     {
         const updatedList = { ...initialList, title, description };
@@ -26,6 +39,9 @@ export default function AddEditTaskListDialogue({ initialList = {}, onClose, onC
         setDescription('');
     }
 
+    /**
+     * Called when the user presses to Cancel button, or clicks away from the modal form.
+     */
     function handleClose()
     {
         onClose();
