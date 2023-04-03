@@ -3,10 +3,11 @@ import SideBar from './components/SideBar';
 
 import './App.css';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet';
 
 export default function App()
 {
-    localStorage.removeItem('currentTaskListId');
+    //localStorage.removeItem('currentTaskListId');
     if (localStorage.currentTaskListId === undefined)
     {
         const defaultData = [
@@ -45,15 +46,18 @@ export default function App()
                     selected: item.id === list.id
                 });
             });
+
+            localStorage.currentTaskListId = list.id;
             localStorage.storeObject('taskLists', newList);
             return newList;
         });
     }
 
-    function addTaskList(data) {
+    function addTaskList(data)
+    {
         setTaskLists(p =>
         {
-            const newList = p.map(item =>
+            const updatedList = p.map(item =>
             {
                 return ({
                     ...item,
@@ -61,39 +65,70 @@ export default function App()
                 });
             });
 
-            newList.push({
+            const newList = {
                 id: crypto.randomUUID(),
                 title: data.title,
                 description: data.description,
                 selected: true
-            });
+            };
 
-            localStorage.storeObject('taskLists', newList);
-            return newList;
+            updatedList.push(newList);
+
+            localStorage.currentTaskListId = newList.id;
+            localStorage.storeObject('taskLists', updatedList);
+            return updatedList;
         });
     }
 
-    function deleteTaskList(list) {
+    function deleteTaskList(list)
+    {
         setTaskLists(p =>
         {
             const newList = p.filter(l => l.id !== list.id);
             setArchiveSelected(newList.length === 0);
-            if (newList.length > 0) newList[0].selected = true;
+            if (newList.length > 0) {
+                newList[0].selected = true;
+                
+            }
+            localStorage.currentTaskListId = newList[0]?.id || '';
             localStorage.storeObject('taskLists', newList);
             return newList;
         });
     }
 
-    function editTaskList(editedList) {
-        setTaskLists(p => {
-          const newList = p.map(list => list.id === editedList.id ? editedList : list);
-          localStorage.storeObject('taskLists', newList);
-          return newList;
+    function editTaskList(editedList)
+    {
+        setTaskLists(p =>
+        {
+            const newList = p.map(list => list.id === editedList.id ? editedList : list);
+            localStorage.storeObject('taskLists', newList);
+            return newList;
         });
-      }
+    }
+
+    function getCurrentPageTitle()
+    {
+        try {
+            if (archiveSelected)
+            {
+                return "Archive • Task List App";
+            }
+            if (localStorage.currentTaskListId.length > 0)
+            {
+                const taskList = taskLists.find(p => p.id === localStorage.currentTaskListId);
+                return `${taskList.title} • Task List App`;
+            }
+        } catch {
+            return 'Task List App';
+        }
+        return 'Task List App';
+    }
 
     return (
         <div className="App">
+            <Helmet>
+                <title>{ getCurrentPageTitle() }</title>
+            </Helmet>
             <HeaderBar />
             <main className='page-container'>
                 <SideBar
