@@ -16,8 +16,9 @@ import ConfirmDialogue from '../ConfirmDialogue';
 
 import './SideBar.css';
 import { Tooltip } from '@mui/material';
+import { isEmpty } from 'lodash';
 
-export default function SideBar({ taskLists, setSelected, isArchiveSelected, addTaskList, editTaskList, deleteTaskList })
+export default function SideBar({ taskLists, setSelected, isArchiveSelected, onArchiveButtonClicked, addTaskList, editTaskList, deleteTaskList })
 {
     const [dlgAddEdit, toggleAddEditDialogue] = useState({ open:false });
     const [dlgDelete, toggleDeleteDialogue] = useState({ open: false });
@@ -42,8 +43,7 @@ export default function SideBar({ taskLists, setSelected, isArchiveSelected, add
 
     function openArchive() 
     {
-        // TODO: Add Archive Logic.
-        setSelected(null);
+        onArchiveButtonClicked();
     }
 
     function openAddDialogue()
@@ -62,7 +62,7 @@ export default function SideBar({ taskLists, setSelected, isArchiveSelected, add
                 <Typography onClick={openAddDialogue} className=".top-text" variant="button">Add New List</Typography>
                 <AddSharpIcon onClick={openAddDialogue} />
             </Stack>
-            <Stack onClick={() => openArchive()} className={`row ${isArchiveSelected && "selected"}`} direction="row" gap={2}>
+            <Stack onClick={() => openArchive()} className={`row ${(isArchiveSelected === true) && "selected"}`} direction="row" gap={2}>
                 <Inventory2OutlinedIcon />
                 <Typography className=".top-text">Archive</Typography>
             </Stack>
