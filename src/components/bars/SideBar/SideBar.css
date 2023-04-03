@@ -1,0 +1,65 @@
+/* =================================================== */
+/*  SIDEBAR STYLES
+/* =================================================== */
+
+.sidebar-left {
+    background-color: var(--bg-primary);
+    min-height: calc(100vh -50px);
+    width: 290px;
+    min-width: 290px;
+    color: var(--font-color-secondary);
+}
+
+.sidebar-left .row {
+    padding: 15px;
+    cursor: pointer;
+}
+
+.sidebar-left .row:not(.top):not(.selected):hover {
+    background-color: var(--bg-hover);
+    border-left: 5px solid var(--bg-brand);
+    padding-left: 10px;
+    color: var(--bg-brand-hover);
+}
+
+.sidebar-left .row.top:hover {
+    color: var(--bg-brand-hover);
+}
+
+.sidebar-left .row.selected {
+    background-color: var(--bg-brand-disable);
+    border-left: 5px solid var(--bg-brand);
+    padding-left: 10px;
+    color: var(--bg-brand-hover);
+}
+
+.sidebar-left .row.selected p {
+    font-weight: 500;
+}
+
+.sidebar-left .top-text {
+    text-align: right;
+}
+
+.sidebar-left .glyphs {
+    display: none;
+    opacity: 0;
+    margin-left: auto;
+    animation-name: fadeIn;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.75;
+    }
+}
+
+.sidebar-left .row:hover .glyphs {
+    display: block;
+}

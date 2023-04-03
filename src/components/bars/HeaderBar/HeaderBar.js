@@ -1,17 +1,20 @@
 import AppsIcon from '@mui/icons-material/Apps';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import { Stack, Typography, Box } from '@mui/material';
 
 import './HeaderBar.css';
 
+/**
+ * Renders a header bar with the app title and icon.
+ *
+ * @returns {JSX.Element} Header bar component.
+ */
 export default function HeaderBar() {
   return (
-    <header className='header-container'>
+    <Box className='header-container'>
         <Stack className='app-title-stack' direction="row" alignItems="left" gap={2}>
             <AppsIcon />
             <Typography className='app-title' variant="body1">To Do</Typography>
         </Stack>
-        <div></div>
-    </header>
+    </Box>
   );
 }

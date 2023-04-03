@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
+// Overridden Prototype Functions.
+import './prototype'
+
 // Site-Wide CSS
 import '~/styles/reset.css';
 import '~/styles/theme.css';
@@ -31,8 +34,4 @@ const router = createBrowserRouter(
 
 ReactDOM
     .createRoot(document.getElementById('root'))
-    .render(
-        <React.StrictMode>
-            <RouterProvider router={router} />
-        </React.StrictMode>
-    );
+    .render(<RouterProvider router={router} />);
