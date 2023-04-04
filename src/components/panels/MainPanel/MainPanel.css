@@ -1,0 +1,16 @@
+.main-panel {
+    flex: 1;
+    margin: 20px 40px;
+}
+
+.main-panel .title {
+    color: var(--bg-brand);
+    font-size: 42px;
+    font-weight: 100;
+}
+
+.main-panel .description {
+    color: var(--bg-brand);
+    font-size: 21px;
+    font-weight: 100;
+}

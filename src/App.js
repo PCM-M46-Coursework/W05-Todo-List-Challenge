@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash';
 
 import HeaderBar from './components/bars/HeaderBar';
 import SideBar from './components/bars/SideBar';
+import MainPanel from './components/panels/MainPanel';
 
 import './App.css';
 
@@ -87,7 +88,6 @@ export default function App()
     useEffect(() =>
     {
         localStorage.isArchiveSelected = archiveSelected;
-        console.log(localStorage.isArchiveSelected);
         if (archiveSelected !== true) return;
         setDocumentTitle('Archive • Task List Challenge');
     }, [archiveSelected]);
@@ -266,7 +266,12 @@ export default function App()
                     onArchiveButtonClicked={onArchiveButtonClicked}
                     addTaskList={addTaskList}
                     deleteTaskList={deleteTaskList}
-                    editTaskList={editTaskList} />
+                    editTaskList={editTaskList}
+                />
+                <MainPanel
+                    isArchiveSelected={archiveSelected}
+                    currentTaskListFilter={taskLists.filter(p => p.id === localStorage.currentTaskListId)}
+                />
             </main>
         </div>
     );
