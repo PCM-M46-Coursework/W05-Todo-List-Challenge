@@ -5,6 +5,9 @@ import NoTasksCard from '~/components/cards/NoTasksCard';
 import AddTaskPanel from '../AddTaskPanel';
 
 import './MainPanel.css';
+import { useReadLocalStorage, useLocalStorage } from 'usehooks-ts';
+import { useState } from 'react';
+import TaskListDisplayPanel from '../TaskListDisplayPanel';
 
 /**
  * A component for displaying a list of tasks.
@@ -14,11 +17,13 @@ import './MainPanel.css';
  * @param {Array} props.currentTaskListFilter - An array of task list filters.
  * @returns {JSX.Element} - The rendered component.
  */
-export default function MainPanel({ isArchiveSelected, currentTaskListFilter, addTask })
+export default function MainPanel({ addTask })
 {
-    const selectedTaskList = currentTaskListFilter[0];
-    let title = selectedTaskList?.title || "Archived Tasks";
-    let description = selectedTaskList?.description || "";
+    const isArchiveSelected = useReadLocalStorage("isArchiveSelected");
+    const [selectedTaskList, _] = useLocalStorage("selectedTaskList", { tasks:[] });
+
+    const title = selectedTaskList?.title || "Archived Tasks";
+    const description = selectedTaskList?.description || "";
 
     /**
      * Adds a new task to the current list.
@@ -43,14 +48,9 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter, ad
                 </>
                 : <Stack gap={4}>
                     <AddTaskPanel addTaskToList={addTaskToList} />
-                    {isEmpty(selectedTaskList.tasks)
+                    {isEmpty(selectedTaskList.tasks) || selectedTaskList.tasks.length === 0
                         ? <NoTasksCard />
-                        : <>
-                            {/* TASK CARD MAP */}
-                            <pre>
-                                {isEmpty(selectedTaskList.tasks) ? "No Tasks." : selectedTaskList.tasks}
-                            </pre>
-                        </>
+                        : <TaskListDisplayPanel />
                     }
                 </Stack>
             }

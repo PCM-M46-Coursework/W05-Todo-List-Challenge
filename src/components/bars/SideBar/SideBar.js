@@ -16,6 +16,7 @@ import AddEditTaskListDialogue from '../../dialogues/AddEditTaskListDialogue';
 import ConfirmDialogue from '../../dialogues/ConfirmDialogue';
 
 import './SideBar.css';
+import { useLocalStorage } from 'usehooks-ts';
 
 /**
  * The SideBar component displays a list of task lists and allows the user
@@ -32,14 +33,15 @@ import './SideBar.css';
  * @returns {JSX.Element} The JSX representation of the SideBar component.
  */
 export default function SideBar({ 
-    taskLists, 
     setSelected, 
-    isArchiveSelected, 
     onArchiveButtonClicked, 
     addTaskList, 
     editTaskList, 
     deleteTaskList })
 {
+    const [taskLists, setTaskLists] = useLocalStorage("taskLists", []);
+    const [isArchiveSelected, setArchiveState] = useLocalStorage("isArchiveSelected", false);
+    const [selectedTaskList, _] = useLocalStorage("selectedTaskList", { tasks:[] });
     const [dlgAddEdit, toggleAddEditDialogue] = useState({ open:false });
     const [dlgDelete, toggleDeleteDialogue] = useState({ open: false });
 
@@ -130,7 +132,7 @@ export default function SideBar({
                     initialList: list
                 });
                 
-                return <Stack onClick={() => setSelected(list)} key={list.id} className={`row ${list.selected && "selected"}`} direction="row" gap={2}>
+                return <Stack onClick={() => setSelected(list)} key={list.id} className={`row ${list.id === selectedTaskList?.id && "selected"}`} direction="row" gap={2}>
                     <ListIcon />
                     <Typography variant="body1">{list.title}</Typography>
                     <Stack sx={{ height:16 }} className="glyphs" direction="row" gap={2}>
