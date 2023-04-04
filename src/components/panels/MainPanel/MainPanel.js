@@ -1,9 +1,10 @@
 import { Typography, Stack, Box } from '@mui/material';
+import { isEmpty } from 'lodash';
 
+import NoTasksCard from '~/components/cards/NoTasksCard';
 import AddTaskPanel from '../AddTaskPanel';
 
 import './MainPanel.css';
-import { isEmpty } from 'lodash';
 
 /**
  * A component for displaying a list of tasks.
@@ -40,13 +41,18 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter, ad
                 ? <>
                     {/* ARCHIVE PANEL */}
                 </>
-                : <>
+                : <Stack gap={4}>
                     <AddTaskPanel addTaskToList={addTaskToList} />
-                    <pre>
-                        {isEmpty(selectedTaskList.tasks) ? "No Tasks." : selectedTaskList.tasks}
-                    </pre>
-                    {/* TASK LIST PANEL */}
-                </>
+                    {isEmpty(selectedTaskList.tasks)
+                        ? <NoTasksCard />
+                        : <>
+                            {/* TASK CARD MAP */}
+                            <pre>
+                                {isEmpty(selectedTaskList.tasks) ? "No Tasks." : selectedTaskList.tasks}
+                            </pre>
+                        </>
+                    }
+                </Stack>
             }
         </Box>
     );
