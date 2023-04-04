@@ -19,15 +19,27 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
     let description = selectedTaskList?.description || "";
 
     /**
-     * Adds a new task to the list.
+     * Adds a new task to the current list.
      * 
-     * @param {string} newTask - The new task to add to the list.
+     * @param {string} title - The title of the new task to add to the current list.
+     * @param {string} description - The the description of the new task to add to the current list.
      */
-    function addTaskToList(newTask)
+    function addTaskToList(title, description)
     {
-        // TODO: Task <-> TaskList Relations.
-        // TODO: Task Persistence.
-        console.log("addTaskToList:", newTask);
+        // Generate a `Task` object from the `Add` form info. 
+        const newTask =
+        {
+            id: crypto.randomUUID(),
+            taskListId: selectedTaskList.id,
+            title: title,
+            description: description,
+            archived: false
+        }
+
+        // TODO: Associate generated `Task` with it's parent `TaskList`.
+
+        // TODO: Persist `Task` and `TaskList` data to `localStorage`.
+
     }
 
     return (
