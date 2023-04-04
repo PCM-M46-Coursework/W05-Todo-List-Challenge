@@ -36,7 +36,9 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
             archived: false
         }
 
-        // TODO: Associate generated `Task` with it's parent `TaskList`.
+        // Associate generated `Task` with it's parent `TaskList`.
+        selectedTaskList.tasks ??= [];
+        selectedTaskList.tasks.push(newTask.id);
 
         // TODO: Persist `Task` and `TaskList` data to `localStorage`.
 
