@@ -152,7 +152,7 @@ export default function App()
     // =========================================================
     //  STATE CHANGE HANDLERS
     // =========================================================
-    
+
     /**
      * Sets archive state to true and clears the selected task list.
      *
@@ -193,7 +193,7 @@ export default function App()
     }
 
     // =========================================================
-    //  MUTATION FUNCTIONS
+    //  TASK LIST CRUD FUNCTIONS
     // =========================================================
 
     /**
@@ -231,18 +231,6 @@ export default function App()
     }
 
     /**
-     * Adds a new task with the provided title and description to the task array.
-     *
-     * @function
-     * @param {object} task - The object containing title and description of the new task.
-     * @returns {void}
-     */
-    function addTask(task)
-    {
-        setTasks(p => isArray(p) ? [...p, task] : [task]);
-    }
-
-    /**
      * Deletes the specified task list from the task list array and selects the next available task list.
      *
      * @function
@@ -272,6 +260,41 @@ export default function App()
         {
             return p.map(list => list.id === editedList.id ? editedList : list);
         });
+    }
+
+    // =========================================================
+    //  TASK CRUD FUNCTIONS
+    // =========================================================
+
+    /**
+     * Adds a new task with the provided title and description to the task array, and 
+     * associates the task with the currently selected task list.
+     *
+     * @function
+     * @param {String} task - The strin containing the title of the new task.
+     * @param {String} task - The object containing the description of the new task.
+     * @param {Object} task - The object containing details of the task list to add this new task to.
+     * @returns {void}
+     */
+    function addTask(title, description, selectedTaskList)
+    {
+        // Generate a `Task` object from the `Add` form info. 
+        const task =
+        {
+            id: crypto.randomUUID(),
+            taskListId: selectedTaskList.id,
+            title: title,
+            description: description,
+            archived: false
+        };
+
+        // Associate generated `Task` with it's parent `TaskList`.
+        selectedTaskList.tasks ??= [];
+        selectedTaskList.tasks.push(task.id);
+
+        // Persist `Task` and `TaskList` data to `localStorage`.
+        setTasks(p => isArray(p) ? [...p, task] : [task]);
+        editTaskList(selectedTaskList);
     }
 
     // =========================================================

@@ -13,7 +13,7 @@ import { isEmpty } from 'lodash';
  * @param {Array} props.currentTaskListFilter - An array of task list filters.
  * @returns {JSX.Element} - The rendered component.
  */
-export default function MainPanel({ isArchiveSelected, currentTaskListFilter, updateTaskList, addTask })
+export default function MainPanel({ isArchiveSelected, currentTaskListFilter, addTask })
 {
     const selectedTaskList = currentTaskListFilter[0];
     let title = selectedTaskList?.title || "Archived Tasks";
@@ -27,23 +27,7 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter, up
      */
     function addTaskToList(title, description)
     {
-        // Generate a `Task` object from the `Add` form info. 
-        const newTask =
-        {
-            id: crypto.randomUUID(),
-            taskListId: selectedTaskList.id,
-            title: title,
-            description: description,
-            archived: false
-        }
-
-        // Associate generated `Task` with it's parent `TaskList`.
-        selectedTaskList.tasks ??= [];
-        selectedTaskList.tasks.push(newTask.id);
-
-        // Persist `Task` and `TaskList` data to `localStorage`.
-        addTask(newTask);
-        updateTaskList(selectedTaskList);
+        addTask(title, description, selectedTaskList);
     }
 
     return (
@@ -52,17 +36,17 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter, up
                 <Typography className="title">{title}</Typography>
                 <Typography className="description">{description}</Typography>
             </Stack>
-            {isArchiveSelected 
+            {isArchiveSelected
                 ? <>
                     {/* ARCHIVE PANEL */}
-                  </>
+                </>
                 : <>
                     <AddTaskPanel addTaskToList={addTaskToList} />
                     <pre>
                         {isEmpty(selectedTaskList.tasks) ? "No Tasks." : selectedTaskList.tasks}
                     </pre>
                     {/* TASK LIST PANEL */}
-                  </>
+                </>
             }
         </Box>
     );
