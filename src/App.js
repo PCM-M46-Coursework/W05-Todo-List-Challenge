@@ -49,6 +49,7 @@ export default function App()
     const [tasks, setTasks] = useState(localStorage.getObject('tasks', []));
     const [archiveSelected, setArchiveState] = useState(localStorage.isArchiveSelected === true);
     const [documentTitle, setDocumentTitle] = useState(localStorage.documentTitle);
+    const [currentTaskListId, setCurrentTaskListId] = useState(localStorage.currentTaskListId);
 
     // =========================================================
     //  PERSISTANCE
@@ -103,8 +104,6 @@ export default function App()
      */
     useEffect(() =>
     {
-        const selectedList = taskLists.filter(p => p.selected);
-        localStorage.currentTaskListId = selectedList[0]?.id || "";
         localStorage.storeObject('taskLists', taskLists);
 
         if (archiveSelected === true) return;
@@ -114,6 +113,7 @@ export default function App()
             return;
         }
 
+        const selectedList = taskLists.filter(p => p.selected);
         const suffix = "Task List Challenge";
         if (isEmpty(selectedList))
         {
@@ -148,6 +148,19 @@ export default function App()
     {
         localStorage.documentTitle = documentTitle;
     }, [documentTitle]);
+
+    /**
+     * This hook is used to save the current TaskList Id to localStorage.
+     * It runs when currentTaskListId value changes.
+     * 
+     * @function
+     * @param {string} currentTaskListId - The current value of document title.
+     * @returns {void}
+     */
+    useEffect(() =>
+    {
+        localStorage.currentTaskListId = currentTaskListId;
+    }, [currentTaskListId]);
 
     // =========================================================
     //  STATE CHANGE HANDLERS
@@ -205,6 +218,8 @@ export default function App()
      */
     function setSelectedTaskList(list)
     {
+        setCurrentTaskListId(list.id);
+        localStorage.storeObject('taskLists', taskLists);
         onAnyTaskListAction(p =>
             p.map(item => ({ ...item, selected: item.id === list.id })));
     }
@@ -319,7 +334,7 @@ export default function App()
                 />
                 <MainPanel
                     isArchiveSelected={archiveSelected}
-                    currentTaskListFilter={taskLists.filter(p => p.id === localStorage.currentTaskListId)}
+                    currentTaskListFilter={taskLists.filter(p => p.id === currentTaskListId)}
                     updateTaskList={editTaskList}
                     addTask={addTask}
                 />
