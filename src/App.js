@@ -88,7 +88,6 @@ export default function App()
     useEffect(() =>
     {
         localStorage.isArchiveSelected = archiveSelected;
-        console.log(localStorage.isArchiveSelected);
         if (archiveSelected !== true) return;
         setDocumentTitle('Archive • Task List Challenge');
     }, [archiveSelected]);

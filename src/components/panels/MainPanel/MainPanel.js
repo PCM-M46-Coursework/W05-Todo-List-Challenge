@@ -1,28 +1,50 @@
-import { Container, Typography, Stack } from '@mui/material';
+import { Typography, Stack, Box } from '@mui/material';
 
 import AddTaskPanel from '../AddTaskPanel';
 
 import './MainPanel.css';
-import { isEmpty } from 'lodash';
 
+/**
+ * A component for displaying a list of tasks.
+ * 
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isArchiveSelected - A boolean indicating whether the archive is selected.
+ * @param {Array} props.currentTaskListFilter - An array of task list filters.
+ * @returns {JSX.Element} - The rendered component.
+ */
 export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
 {
-    let title = "Archived Tasks";
-    let description = "";  
+    const selectedTaskList = currentTaskListFilter[0];
+    let title = selectedTaskList?.title || "Archived Tasks";
+    let description = selectedTaskList?.description || "";
 
-    if (isArchiveSelected !== true)
+    /**
+     * Adds a new task to the list.
+     * 
+     * @param {string} newTask - The new task to add to the list.
+     */
+    function addTaskToList(newTask)
     {
-        title = currentTaskListFilter[0]?.title;
-        description = currentTaskListFilter[0]?.description;
+        // TODO: Task <-> TaskList Relations.
+        // TODO: Task Persistence.
+        console.log("addTaskToList:", newTask);
     }
 
     return (
-        <Container class="main-panel">
+        <Box className="main-panel">
             <Stack sx={{ mb: 3, pl: 3 }} direction={"row"} alignItems={"center"} gap={3}>
                 <Typography className="title">{title}</Typography>
                 <Typography className="description">{description}</Typography>
             </Stack>
-            <AddTaskPanel />
-        </Container>
+            {isArchiveSelected 
+                ? <>
+                    {/* ARCHIVE PANEL */}
+                  </>
+                : <>
+                    <AddTaskPanel addTaskToList={addTaskToList} />
+                    {/* TASK LIST PANEL */}
+                  </>
+            }
+        </Box>
     );
 }

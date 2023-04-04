@@ -6,7 +6,3 @@
 .add-task-panel svg {
     color: var(--bg-brand);
 }
-
-.add-task-panel .add-task-input {
-    color: var(--bg-brand);
-}
