@@ -3,6 +3,7 @@ import { Typography, Stack, Box } from '@mui/material';
 import AddTaskPanel from '../AddTaskPanel';
 
 import './MainPanel.css';
+import { isEmpty } from 'lodash';
 
 /**
  * A component for displaying a list of tasks.
@@ -12,22 +13,21 @@ import './MainPanel.css';
  * @param {Array} props.currentTaskListFilter - An array of task list filters.
  * @returns {JSX.Element} - The rendered component.
  */
-export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
+export default function MainPanel({ isArchiveSelected, currentTaskListFilter, addTask })
 {
     const selectedTaskList = currentTaskListFilter[0];
     let title = selectedTaskList?.title || "Archived Tasks";
     let description = selectedTaskList?.description || "";
 
     /**
-     * Adds a new task to the list.
+     * Adds a new task to the current list.
      * 
-     * @param {string} newTask - The new task to add to the list.
+     * @param {string} title - The title of the new task to add to the current list.
+     * @param {string} description - The the description of the new task to add to the current list.
      */
-    function addTaskToList(newTask)
+    function addTaskToList(title, description)
     {
-        // TODO: Task <-> TaskList Relations.
-        // TODO: Task Persistence.
-        console.log("addTaskToList:", newTask);
+        addTask(title, description, selectedTaskList);
     }
 
     return (
@@ -36,14 +36,17 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
                 <Typography className="title">{title}</Typography>
                 <Typography className="description">{description}</Typography>
             </Stack>
-            {isArchiveSelected 
+            {isArchiveSelected
                 ? <>
                     {/* ARCHIVE PANEL */}
-                  </>
+                </>
                 : <>
                     <AddTaskPanel addTaskToList={addTaskToList} />
+                    <pre>
+                        {isEmpty(selectedTaskList.tasks) ? "No Tasks." : selectedTaskList.tasks}
+                    </pre>
                     {/* TASK LIST PANEL */}
-                  </>
+                </>
             }
         </Box>
     );
