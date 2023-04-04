@@ -1,0 +1,12 @@
+.add-task-panel {
+    width: 100%;
+    padding: 20px;
+}
+
+.add-task-panel svg {
+    color: var(--bg-brand);
+}
+
+.add-task-panel .add-task-input {
+    color: var(--bg-brand);
+}

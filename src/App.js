@@ -4,19 +4,9 @@ import { isEmpty } from 'lodash';
 
 import HeaderBar from './components/bars/HeaderBar';
 import SideBar from './components/bars/SideBar';
-
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
-import Tooltip from '@mui/material/Tooltip';
-
-import ListIcon from '@mui/icons-material/List';
-import AddSharpIcon from '@mui/icons-material/AddSharp';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import MainPanel from './components/panels/MainPanel';
 
 import './App.css';
-import { Container, TextField, IconButton, Button } from '@mui/material';
 
 /**
  * The main application page for the task list app.
@@ -277,27 +267,12 @@ export default function App()
                     onArchiveButtonClicked={onArchiveButtonClicked}
                     addTaskList={addTaskList}
                     deleteTaskList={deleteTaskList}
-                    editTaskList={editTaskList} />
-                <Container class="main-panel">
-                    <Stack sx={{ mb:3, pl:3 }} direction={"row"} alignItems={"center"} gap={3}>
-                        <Typography className="title">Kanban Board</Typography>
-                        <Typography className="description">A Kanban style To Do list</Typography>
-                    </Stack>
-                    <Paper elevation={3} className="add-task-panel">
-                        <Stack direction={"row"} alignItems={"center"}>
-                            <AddSharpIcon sx={{ mr:2 }} />                            
-                            <TextField
-                                fullWidth
-                                id="fullWidth"
-                                label="Add New Task" 
-                                className="add-task-input"
-                            />
-                            <Button>
-                                <Typography>Add</Typography>
-                            </Button>
-                        </Stack>
-                    </Paper>
-                </Container>
+                    editTaskList={editTaskList}
+                />
+                <MainPanel
+                    isArchiveSelected={archiveSelected}
+                    currentTaskListFilter={taskLists.filter(p => p.id === localStorage.currentTaskListId)}
+                />
             </main>
         </div>
     );
