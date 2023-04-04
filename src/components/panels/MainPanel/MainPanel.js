@@ -3,6 +3,7 @@ import { Typography, Stack, Box } from '@mui/material';
 import AddTaskPanel from '../AddTaskPanel';
 
 import './MainPanel.css';
+import { isEmpty } from 'lodash';
 
 /**
  * A component for displaying a list of tasks.
@@ -12,7 +13,7 @@ import './MainPanel.css';
  * @param {Array} props.currentTaskListFilter - An array of task list filters.
  * @returns {JSX.Element} - The rendered component.
  */
-export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
+export default function MainPanel({ isArchiveSelected, currentTaskListFilter, updateTaskList, addTask })
 {
     const selectedTaskList = currentTaskListFilter[0];
     let title = selectedTaskList?.title || "Archived Tasks";
@@ -40,8 +41,9 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
         selectedTaskList.tasks ??= [];
         selectedTaskList.tasks.push(newTask.id);
 
-        // TODO: Persist `Task` and `TaskList` data to `localStorage`.
-
+        // Persist `Task` and `TaskList` data to `localStorage`.
+        addTask(newTask);
+        updateTaskList(selectedTaskList);
     }
 
     return (
@@ -56,6 +58,9 @@ export default function MainPanel({ isArchiveSelected, currentTaskListFilter })
                   </>
                 : <>
                     <AddTaskPanel addTaskToList={addTaskToList} />
+                    <pre>
+                        {isEmpty(selectedTaskList.tasks) ? "No Tasks." : selectedTaskList.tasks}
+                    </pre>
                     {/* TASK LIST PANEL */}
                   </>
             }

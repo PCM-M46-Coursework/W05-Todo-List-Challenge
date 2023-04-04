@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { isEmpty } from 'lodash';
+import { isArray, isEmpty } from 'lodash';
 
 import HeaderBar from './components/bars/HeaderBar';
 import SideBar from './components/bars/SideBar';
@@ -41,10 +41,12 @@ export default function App()
         localStorage.storeObject('taskLists', defaultData);
         localStorage.currentTaskListId = defaultData[0].id;
         localStorage.isArchiveSelected = false;
+        localStorage.storeObject('tasks', []);
         localStorage.documentTitle = 'Task List Challenge';
     }
 
     const [taskLists, setTaskLists] = useState(localStorage.getObject('taskLists', []));
+    const [tasks, setTasks] = useState(localStorage.getObject('tasks', []));
     const [archiveSelected, setArchiveState] = useState(localStorage.isArchiveSelected === true);
     const [documentTitle, setDocumentTitle] = useState(localStorage.documentTitle);
 
@@ -83,7 +85,6 @@ export default function App()
      * 
      * @function
      * @param {boolean} archiveSelected - The current value of archive selection.
-     * @returns {void}
      */
     useEffect(() =>
     {
@@ -121,6 +122,19 @@ export default function App()
         }
         setDocumentTitle(`${selectedList[0].title} • ${suffix}`);
     }, [taskLists]);
+
+    /**
+     * This hook is used to save the tasks to localStorage..
+     * It runs when tasks value changes.
+     * 
+     * @function
+     * @param {Array} taskLists - The list of tasks.
+     * @returns {void}
+     */
+    useEffect(() =>
+    {
+        localStorage.storeObject('tasks', tasks);
+    }, [tasks]);
 
     /**
      * This hook is used to save the document title to localStorage.
@@ -217,6 +231,18 @@ export default function App()
     }
 
     /**
+     * Adds a new task with the provided title and description to the task array.
+     *
+     * @function
+     * @param {object} task - The object containing title and description of the new task.
+     * @returns {void}
+     */
+    function addTask(task)
+    {
+        setTasks(p => isArray(p) ? [...p, task] : [task]);
+    }
+
+    /**
      * Deletes the specified task list from the task list array and selects the next available task list.
      *
      * @function
@@ -271,6 +297,8 @@ export default function App()
                 <MainPanel
                     isArchiveSelected={archiveSelected}
                     currentTaskListFilter={taskLists.filter(p => p.id === localStorage.currentTaskListId)}
+                    updateTaskList={editTaskList}
+                    addTask={addTask}
                 />
             </main>
         </div>
