@@ -1,13 +1,13 @@
 import { Button, Paper, Stack, Tooltip, Typography } from '@mui/material';
-import { useReadLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from 'usehooks-ts';
 
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 
 export default function TaskCard({ id, onArchiveClick, onEditClick})
 {
-    const tasks = useReadLocalStorage("tasks");
-    const task = tasks.find(t => t.id === id);
+    const [tasks, _] = useLocalStorage("tasks", []);
+    const task = tasks.find(t => t.id === id) || { id:0 };
 
     return (
         <Paper elevation={3} sx={{ p: 2 }}>

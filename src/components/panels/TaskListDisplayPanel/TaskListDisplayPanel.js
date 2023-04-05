@@ -8,18 +8,30 @@ import ConfirmDialogue from '~/components/dialogues/ConfirmDialogue';
 
 export default function TaskListDisplayPanel()
 {
-    const [selectedTaskList, _] = useLocalStorage("selectedTaskList", { tasks: [] });
-    const [tasks, setTasks] = useLocalStorage("tasks", []);
+    const [selectedTaskList, setSelectedTaskList] = useLocalStorage("selectedTaskList", { tasks: [] });
+    const [, setTaskLists] = useLocalStorage("taskLists", []);
+    const [, setTasks] = useLocalStorage("tasks", []);
+
     const [dlgEdit, toggleEditDialogue] = useState({ open: false });
     const [dlgArchive, toggleArchiveDialogue] = useState({ open: false });
 
     /**
      * Archive the selected task.
      */
-    function onArchive()
+    function onArchive(task)
     {
+        toggleArchiveDialogue({ open: false });
+    
+        // Set Archived flag to true.
+        task.archived = true;
+        setTasks(p => p.map(t => t.id === task.id ? task : t));
 
-        toggleArchiveDialogue({ open: false });        
+        // Remove from selectedTaskList.
+        selectedTaskList.tasks = selectedTaskList.tasks.filter(t => t !== task.id);
+        setSelectedTaskList(selectedTaskList);
+
+        // Update taskLists.
+        setTaskLists(p => p.map(t => t.id === selectedTaskList.id ? selectedTaskList : t));
     }
 
     /**
@@ -38,8 +50,8 @@ export default function TaskListDisplayPanel()
      * Edits the selected task.
      */
     function onEdit(task) {
-        setTasks(p => p.map(t => t.id === task.id ? task : t));
         toggleEditDialogue({ open: false });
+        setTasks(p => p.map(t => t.id === task.id ? task : t));
     }
 
     /**
