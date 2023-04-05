@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { isArray, isEmpty } from 'lodash';
 
@@ -7,6 +7,7 @@ import SideBar from './components/bars/SideBar';
 import MainPanel from './components/panels/MainPanel';
 
 import './App.css';
+import { useLocalStorage } from 'usehooks-ts';
 
 /**
  * The main application page for the task list app.
@@ -19,37 +20,11 @@ export default function App()
     //  DEFAULT STATE
     // =========================================================
 
-    //localStorage.removeItem('currentTaskListId'); // DEBUG RESET
-    if (localStorage.currentTaskListId === undefined)
-    {
-        const defaultData = [
-            {
-                id: "22de0ed3-c2fb-4415-a6c5-7670ae24e59a",
-                title: "Kanban Board",
-                description: "A Kanban style To Do list",
-                selected: true
-            },
-            {
-                id: "34765de7-cff5-4016-86c5-f1150dca7ce6",
-                title: "My New List",
-                description: "A new, default list.",
-                selected: false
-            }
-        ];
-
-        // Persist data.
-        localStorage.storeObject('taskLists', defaultData);
-        localStorage.currentTaskListId = defaultData[0].id;
-        localStorage.isArchiveSelected = false;
-        localStorage.storeObject('tasks', []);
-        localStorage.documentTitle = 'Task List Challenge';
-    }
-
-    const [taskLists, setTaskLists] = useState(localStorage.getObject('taskLists', []));
-    const [tasks, setTasks] = useState(localStorage.getObject('tasks', []));
-    const [archiveSelected, setArchiveState] = useState(localStorage.isArchiveSelected === true);
-    const [documentTitle, setDocumentTitle] = useState(localStorage.documentTitle);
-    const [currentTaskListId, setCurrentTaskListId] = useState(localStorage.currentTaskListId);
+    const [taskLists, setTaskLists] = useLocalStorage("taskLists", []);
+    const [tasks, setTasks] = useLocalStorage("tasks", []);
+    const [isArchiveSelected, setIsArchiveSelected] = useLocalStorage("isArchiveSelected", false);
+    const [documentTitle, setDocumentTitle] = useLocalStorage("documentTitle", "Task List Challenge");
+    const [selectedTaskList, setSelectedTaskList] = useLocalStorage("selectedTaskList", {});
 
     // =========================================================
     //  PERSISTANCE
@@ -65,37 +40,43 @@ export default function App()
      */
     useEffect(() =>
     {
-        if (localStorage.isArchiveSelected === true)
+        //localStorage.clear(); // DEBUG RESET
+        if (isEmpty(taskLists))
         {
-            onArchiveButtonClicked();
-            return;
+            const defaultTaskLists = [
+                {
+                    id: "22de0ed3-c2fb-4415-a6c5-7670ae24e59a",
+                    title: "Kanban Board",
+                    description: "A Kanban style To Do list",
+                    tasks: []
+                },
+                {
+                    id: "34765de7-cff5-4016-86c5-f1150dca7ce6",
+                    title: "My New List",
+                    description: "A new, default list.",
+                    tasks: []
+                }
+            ];
+            setTaskLists(defaultTaskLists);
+            setSelectedTaskList(defaultTaskLists[0]);
         }
-
-        const selectedList = taskLists.filter(p => p.selected);
-        if (isEmpty(selectedList))
-        {
-            onArchiveButtonClicked();
-            return;
-        }
-        setSelectedTaskList(selectedList[0]);
     }, []);
 
     /**
      * This hook is used to save the archive selection to localStorage and set the document title if archive is selected.
-     * It runs when archiveSelected value changes.
+     * It runs when isArchiveSelected value changes.
      * 
      * @function
-     * @param {boolean} archiveSelected - The current value of archive selection.
+     * @param {boolean} isArchiveSelected - The current value of archive selection.
      */
     useEffect(() =>
     {
-        localStorage.isArchiveSelected = archiveSelected;
-        if (archiveSelected !== true) return;
+        if (isArchiveSelected !== true) return;
         setDocumentTitle('Archive • Task List Challenge');
-    }, [archiveSelected]);
+    }, [isArchiveSelected]);
 
     /**
-     * This hook is used to save the selected task list to localStorage and update the document title.
+     * This hook is used to update the document title.
      * It runs when taskLists value changes.
      * 
      * @function
@@ -104,79 +85,34 @@ export default function App()
      */
     useEffect(() =>
     {
-        localStorage.storeObject('taskLists', taskLists);
+        if (isArchiveSelected === true) return;
 
-        if (archiveSelected === true) return;
-        if (isEmpty(taskLists))
-        {
-            onArchiveButtonClicked();
-            return;
-        }
-
-        const selectedList = taskLists.filter(p => p.selected);
         const suffix = "Task List Challenge";
-        if (isEmpty(selectedList))
+        if (isEmpty(selectedTaskList))
         {
             setDocumentTitle(suffix);
             return;
         }
-        setDocumentTitle(`${selectedList[0].title} • ${suffix}`);
+
+        setSelectedTaskList(taskLists.find(t => t.id === selectedTaskList.id));
+        setDocumentTitle(`${selectedTaskList.title} • ${suffix}`);
     }, [taskLists]);
-
-    /**
-     * This hook is used to save the tasks to localStorage..
-     * It runs when tasks value changes.
-     * 
-     * @function
-     * @param {Array} taskLists - The list of tasks.
-     * @returns {void}
-     */
-    useEffect(() =>
-    {
-        localStorage.storeObject('tasks', tasks);
-    }, [tasks]);
-
-    /**
-     * This hook is used to save the document title to localStorage.
-     * It runs when documentTitle value changes.
-     * 
-     * @function
-     * @param {string} documentTitle - The current value of document title.
-     * @returns {void}
-     */
-    useEffect(() =>
-    {
-        localStorage.documentTitle = documentTitle;
-    }, [documentTitle]);
-
-    /**
-     * This hook is used to save the current TaskList Id to localStorage.
-     * It runs when currentTaskListId value changes.
-     * 
-     * @function
-     * @param {string} currentTaskListId - The current value of document title.
-     * @returns {void}
-     */
-    useEffect(() =>
-    {
-        localStorage.currentTaskListId = currentTaskListId;
-    }, [currentTaskListId]);
 
     // =========================================================
     //  STATE CHANGE HANDLERS
     // =========================================================
 
     /**
-     * Sets archive state to true and clears the selected task list.
+     * Sets archive state, and selected task list.
      *
      * @function
-     * @param {void}
+     * @param {function} mutationFunction - The function used to mutate the task list.
      * @returns {void}
      */
-    function onArchiveButtonClicked()
+    function setArchiveState(state)
     {
-        setArchiveState(true);
-        setTaskListState();
+        setIsArchiveSelected(state);
+        if (state) setSelectedTaskList({});
     }
 
     /**
@@ -201,8 +137,7 @@ export default function App()
      */
     function setTaskListState(mutate = _ => _)
     {
-        setTaskLists(p =>
-            mutate(p.map(item => ({ ...item, selected: false }))));
+        setTaskLists(p => mutate(p));
     }
 
     // =========================================================
@@ -216,12 +151,10 @@ export default function App()
      * @param {object} list - The task list object to be selected.
      * @returns {void}
      */
-    function setSelectedTaskList(list)
+    function setTaskList(list)
     {
-        setCurrentTaskListId(list.id);
-        localStorage.storeObject('taskLists', taskLists);
-        onAnyTaskListAction(p =>
-            p.map(item => ({ ...item, selected: item.id === list.id })));
+        setArchiveState(false);
+        setSelectedTaskList(list);
     }
 
     /**
@@ -239,7 +172,7 @@ export default function App()
                 id: crypto.randomUUID(),
                 title: item.title,
                 description: item.description,
-                selected: true
+                tasks: []
             });
             return p;
         });
@@ -257,7 +190,11 @@ export default function App()
         onAnyTaskListAction(p =>
         {
             const updatedState = p.filter(l => l.id !== item.id);
-            if (updatedState.length > 0) updatedState[0].selected = true;
+            if (updatedState.length > 0) {
+                setSelectedTaskList(updatedState[0]);
+            } else {
+                setArchiveState(true);
+            }
             return updatedState;
         });
     }
@@ -303,13 +240,13 @@ export default function App()
             archived: false
         };
 
-        // Associate generated `Task` with it's parent `TaskList`.
-        selectedTaskList.tasks ??= [];
-        selectedTaskList.tasks.push(task.id);
-
         // Persist `Task` and `TaskList` data to `localStorage`.
         setTasks(p => isArray(p) ? [...p, task] : [task]);
+
+        // Associate generated `Task` with it's parent `TaskList`.
+        selectedTaskList.tasks.push(task.id);
         editTaskList(selectedTaskList);
+        return task.id;
     }
 
     // =========================================================
@@ -325,16 +262,15 @@ export default function App()
             <main className='page-container'>
                 <SideBar
                     taskLists={taskLists}
-                    setSelected={setSelectedTaskList}
-                    isArchiveSelected={archiveSelected}
-                    onArchiveButtonClicked={onArchiveButtonClicked}
+                    setSelected={setTaskList}
+                    isArchiveSelected={isArchiveSelected}
+                    onArchiveButtonClicked={() => setArchiveState(true)}
                     addTaskList={addTaskList}
                     deleteTaskList={deleteTaskList}
                     editTaskList={editTaskList}
                 />
                 <MainPanel
-                    isArchiveSelected={archiveSelected}
-                    currentTaskListFilter={taskLists.filter(p => p.id === currentTaskListId)}
+                    isArchiveSelected={isArchiveSelected}
                     updateTaskList={editTaskList}
                     addTask={addTask}
                 />
