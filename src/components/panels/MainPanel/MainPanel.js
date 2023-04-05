@@ -8,6 +8,7 @@ import './MainPanel.css';
 import { useReadLocalStorage, useLocalStorage } from 'usehooks-ts';
 import { useState } from 'react';
 import TaskListDisplayPanel from '../TaskListDisplayPanel';
+import ArchivePanel from '../ArchivePanel';
 
 /**
  * A component for displaying a list of tasks.
@@ -43,9 +44,7 @@ export default function MainPanel({ addTask })
                 <Typography className="description">{description}</Typography>
             </Stack>
             {isArchiveSelected
-                ? <>
-                    {/* ARCHIVE PANEL */}
-                </>
+                ? <ArchivePanel />
                 : <Stack gap={4}>
                     <AddTaskPanel addTaskToList={addTaskToList} />
                     {isEmpty(selectedTaskList.tasks) || selectedTaskList.tasks.length === 0
