@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-// Overridden Prototype Functions.
-import './prototype'
-
 // Site-Wide CSS
-import '~/styles/reset.css';
 import '~/styles/theme.css';
 
 // App Settings
@@ -22,6 +18,7 @@ import {
     Route,
     RouterProvider
 } from "react-router-dom";
+import { CssBaseline } from '@mui/material';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -34,4 +31,9 @@ const router = createBrowserRouter(
 
 ReactDOM
     .createRoot(document.getElementById('root'))
-    .render(<RouterProvider router={router} />);
+    .render(
+        <React.Fragment>
+            <CssBaseline />
+            <RouterProvider router={router} />
+        </React.Fragment>
+    );

@@ -11,29 +11,27 @@ import
     } from '@mui/material';
 
 /**
- * A dialogue component for adding/editing a task list.
+ * A dialogue component for adding/editing a task, or task list.
  * 
  * @param {object} props - The component props.
- * @param {object} [props.initialList={}] - The initial task list object.
+ * @param {object} [props.initial={}] - The initial object.
  * @param {function} props.onClose - The callback function to close the dialogue.
  * @param {function} props.onConfirm - The callback function to confirm the changes.
  * @param {string} props.type - The type of the dialogue (either "Add" or "Edit").
  * @param {boolean} [props.open=false] - Whether the dialogue is open or not.
  * @returns {JSX.Element} - The rendered component.
  */
-export default function AddEditTaskListDialogue({ initialList = {}, onClose, onConfirm, type, open = false })
+export default function AddEditDialogue({ initial = {}, onClose, onConfirm, dialogueTitle, type, open = false })
 {
-    console.log(initialList);
-
-    const [title, setTitle] = useState(() => initialList.title || '');
-    const [description, setDescription] = useState(() => initialList.description || '');
+    const [title, setTitle] = useState(() => initial.title || '');
+    const [description, setDescription] = useState(() => initial.description || '');
 
     /**
      * Called when the user presses to OK button.
      */
     function handleConfirm()
     {
-        const updatedList = { ...initialList, title, description };
+        const updatedList = { ...initial, title, description };
         onConfirm(updatedList);
         setTitle('');
         setDescription('');
@@ -52,7 +50,7 @@ export default function AddEditTaskListDialogue({ initialList = {}, onClose, onC
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>                
-                <Typography variant='subtitle1'>{type} Task List</Typography>
+                <Typography variant='subtitle1'>{type} {dialogueTitle}</Typography>
             </DialogTitle>
             <DialogContent>
                 <TextField

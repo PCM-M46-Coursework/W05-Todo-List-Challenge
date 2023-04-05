@@ -12,7 +12,7 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 
-import AddEditTaskListDialogue from '../../dialogues/AddEditTaskListDialogue';
+import AddEditDialogue from '../../dialogues/AddEditDialogue';
 import ConfirmDialogue from '../../dialogues/ConfirmDialogue';
 
 import './SideBar.css';
@@ -159,10 +159,11 @@ export default function SideBar({
             />}
 
             {dlgAddEdit.open &&
-            <AddEditTaskListDialogue 
+            <AddEditDialogue 
                 open={dlgAddEdit.open}
                 initialList={dlgAddEdit.initialList}
                 type = {dlgAddEdit.type}
+                dialogueTitle = "Task List"
                 onConfirm={dlgAddEdit.onConfirm}
                 onClose={() => toggleAddEditDialogue({ open: false })}
             />}
