@@ -19,12 +19,4 @@ Your challenge is to create a to-do list using React. This challenge is designed
  - Edit items.
  - Archive items from the main list to a secondary list.
 
-Visually this project is completely down to your choice! So get creative, and look around at existing to-do list applications, and designs.
-
- ## Implementation
-
-**TODO:** Write Implementation Details.
-
- ## Retrospective
-
-**TODO:** Write Retrospective.
+Visually this project is completely down to your choice! So get creative, and look around at existing to-do list applications, and designs
