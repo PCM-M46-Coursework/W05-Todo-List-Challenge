@@ -29,6 +29,6 @@ As a persistence medium, I am using the Local Storage. I started off by writing 
 
 ## Retrospective
 
-Material UI is a blessing to use, but it does produce this very cut-and-paste website feel, similar to using Bootstrap with the default settings. At this point, we had not touched on Styled Conponents, and so although I was able to capitalise on many of the advanced features within MUI, I was not able to make it as polished as I would have liked.
+Material UI is a blessing to use, but it does produce this very cut-and-paste website feel, similar to using Bootstrap with the default settings. At this point, we had not touched on Styled Components, and so although I was able to capitalise on many of the advanced features within MUI, I was not able to make it as polished as I would have liked.
 
 Using Local Storage as a persistence medium was a challenge. There still are a few bugs that mean that the selected state of menu items don't correlate to user actions correctly. If I were to do this again, I'd want to use routing to pass a slug as a parameter, to ensure that the menus don't get cross-wired. I'd also switch out from using Local Storage, to something a bit more robust.
